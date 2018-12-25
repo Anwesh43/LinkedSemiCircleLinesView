@@ -20,6 +20,7 @@ val strokeFactor : Int = 90
 val sizeFactor : Float = 2.6f
 val scDiv : Double = 0.51
 val scGap : Float = 0.05f
+val DELAY : Long = 25
 
 fun Int.inverse() : Float = 1f / this
 
@@ -39,7 +40,7 @@ fun Canvas.drawSCNode(i : Int, scale : Float, paint : Paint) {
     val gap : Float = h / (nodes + 1)
     val sc1 : Float = scale.divideScale(0, 2)
     val sc2 : Float = scale.divideScale(1, 2)
-    val size : Float = gap / 3
+    val size : Float = gap / sizeFactor
     paint.strokeWidth = Math.min(w, h) / strokeFactor
     paint.strokeCap = Paint.Cap.ROUND
     paint.color = color
@@ -104,7 +105,7 @@ class SemiCircleLinesView(ctx : Context) : View(ctx) {
             if (animated) {
                 cb()
                 try {
-                    Thread.sleep(50)
+                    Thread.sleep(DELAY)
                     view.invalidate()
                 } catch(ex : Exception) {
 
