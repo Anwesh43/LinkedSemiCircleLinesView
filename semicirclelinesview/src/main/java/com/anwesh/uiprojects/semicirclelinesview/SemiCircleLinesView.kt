@@ -20,7 +20,7 @@ val strokeFactor : Int = 90
 val sizeFactor : Float = 2.6f
 val scDiv : Double = 0.51
 val scGap : Float = 0.05f
-val DELAY : Long = 25
+val DELAY : Long = 20
 
 fun Int.inverse() : Float = 1f / this
 
@@ -34,6 +34,12 @@ fun Float.mirrorValue(a : Int, b : Int) : Float = (1 - scaleFactor()) * a.invers
 
 fun Float.updateScale(dir : Float, a : Int, b : Int) : Float = mirrorValue(a, b) * dir * scGap
 
+fun Int.modulo2() : Int = (this % 2)
+
+fun Int.modulo2Mirror2() : Float = 1f - 2 * modulo2()
+
+fun Int.modulo2Mirror1(k :  Int, n : Int) : Int = (1 - modulo2()) * k + modulo2() * (n - k)
+
 fun Canvas.drawSCNode(i : Int, scale : Float, paint : Paint) {
     val w : Float = width.toFloat()
     val h : Float = height.toFloat()
@@ -46,14 +52,14 @@ fun Canvas.drawSCNode(i : Int, scale : Float, paint : Paint) {
     paint.color = color
     paint.style = Paint.Style.STROKE
     save()
-    translate(w/2, gap * (i + 1) - size)
-    rotate(-90f * (1 - sc1))
-    drawArc(RectF(-size, -2 * size, size, 0f), 90f, 180f, true, paint)
+    translate(w/2, gap * (i + 1))
+    rotate(-90f * (1 - sc1 * i.modulo2Mirror2()))
+    drawArc(RectF(-size, -size, size, size), 90f, 180f, true, paint)
     val yGap : Float = (2 * size - size / 5) / (lines + 1)
     for (j in 0..(lines - 1)) {
-        val sc : Float = sc2.divideScale(j, lines)
+        val sc : Float = sc2.divideScale(i.modulo2Mirror1(j, lines - 1), lines)
         save()
-        translate(size/10 + w/2 * sc, -2 * size + size/10 + yGap + yGap * j)
+        translate(size/10 + w/2 * sc, -size + size/10 + yGap + yGap * j)
         drawLine(0f, 0f, (size - size/10), 0f, paint)
         restore()
     }
