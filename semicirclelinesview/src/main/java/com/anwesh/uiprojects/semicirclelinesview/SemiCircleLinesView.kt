@@ -36,7 +36,7 @@ fun Float.updateScale(dir : Float, a : Int, b : Int) : Float = mirrorValue(a, b)
 fun Canvas.drawSCNode(i : Int, scale : Float, paint : Paint) {
     val w : Float = width.toFloat()
     val h : Float = height.toFloat()
-    val gap : Float = w / (nodes + 1)
+    val gap : Float = h / (nodes + 1)
     val sc1 : Float = scale.divideScale(0, 2)
     val sc2 : Float = scale.divideScale(1, 2)
     val size : Float = gap / 3
@@ -46,13 +46,13 @@ fun Canvas.drawSCNode(i : Int, scale : Float, paint : Paint) {
     paint.style = Paint.Style.STROKE
     save()
     translate(w/2, gap * (i + 1) - size)
-    rotate(90f * (1 - sc1))
-    drawArc(RectF(-size, -2 * size, size, 0f), 0f, 180f, true, paint)
-    val yGap : Float = (2 * size - size / 5) / (lines)
+    rotate(-90f * (1 - sc1))
+    drawArc(RectF(-size, -2 * size, size, 0f), 90f, 180f, true, paint)
+    val yGap : Float = (2 * size - size / 5) / (lines + 1)
     for (j in 0..(lines - 1)) {
-        val sc : Float = sc1.divideScale(j, lines)
+        val sc : Float = sc2.divideScale(j, lines)
         save()
-        translate(size/10 + w/2 * sc, -size + size/10 + yGap * j)
+        translate(size/10 + w/2 * sc, -2 * size + size/10 + yGap + yGap * j)
         drawLine(0f, 0f, (size - size/10), 0f, paint)
         restore()
     }
@@ -220,7 +220,7 @@ class SemiCircleLinesView(ctx : Context) : View(ctx) {
         fun create(activity : Activity) : SemiCircleLinesView {
             val view : SemiCircleLinesView = SemiCircleLinesView(activity)
             activity.setContentView(view)
-            return view 
+            return view
         }
     }
 }
