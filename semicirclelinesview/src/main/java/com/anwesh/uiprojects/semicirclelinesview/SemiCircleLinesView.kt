@@ -215,4 +215,12 @@ class SemiCircleLinesView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    companion object {
+        fun create(activity : Activity) : SemiCircleLinesView {
+            val view : SemiCircleLinesView = SemiCircleLinesView(activity)
+            activity.setContentView(view)
+            return view 
+        }
+    }
 }
