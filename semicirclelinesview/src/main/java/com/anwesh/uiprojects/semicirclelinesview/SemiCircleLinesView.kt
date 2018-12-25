@@ -191,4 +191,26 @@ class SemiCircleLinesView(ctx : Context) : View(ctx) {
             curr.startUpdating(cb)
         }
     }
+
+    data class Renderer(var view : SemiCircleLinesView) {
+        private var scl : SemiCircleLines = SemiCircleLines(0)
+
+        private val animator : Animator = Animator(view)
+
+        fun render(canvas : Canvas, paint : Paint) {
+            canvas.drawColor(Color.parseColor("#BDBDBD"))
+            scl.draw(canvas, paint)
+            animator.animate {
+                scl.update {i, scl ->
+                    animator.stop()
+                }
+            }
+        }
+
+        fun handleTap() {
+            scl.startUpdating {
+                animator.start()
+            }
+        }
+    }
 }
